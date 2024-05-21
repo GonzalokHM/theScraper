@@ -39,29 +39,38 @@ const scrapeProduct = async () => {
       await pages[0].close();
     }
 
-
     try {
       await page.goto(url);
 
+      //   cookies
+      const configButtonId = '#onetrust-pc-btn-handler';
+      await page.waitForSelector(configButtonId, { timeout: 60000 });
+      await page.click(configButtonId);
+      const rejectButtonClass = '.ot-pc-refuse-all-handler';
+      await page.click(rejectButtonClass);
+
+      //   search
       const inputId = '#header-search-input';
       const findProduct = 'Yamaha';
-
       await page.type(inputId, findProduct);
-      //   cookies
-      const configCookies = '#onetrust-pc-btn-handler';
-      const rejectCookies = 'ot-pc-refuse-all-handler';
 
-      await page.click(configCookies);
-      await page.click(rejectCookies);
-      //   search
+      const buttonDataTestId = '[data-testid="header-search-button"]';
+      await page.waitForSelector(buttonDataTestId, { timeout: 60000 });
+      // Forzar el clic usando evaluate
+      await page.evaluate((buttonDataTestId) => {
+        document.querySelector(buttonDataTestId).click();
+      }, buttonDataTestId);
 
-      const buttonId = '#header-search-button';
-
-      await page.click(buttonId);
-
+      nameClass = '.m-0 text-base sm:text-base text-left font-semibold uppercase'
+      await page
     } catch (error) {
       console.error('Failed to navigate or interact with the page:', error);
     }
+    // finally {
+    //   if (browser) {
+    //     await browser.close();
+    //   }
+    // }
   } catch (error) {
     console.error('Failed to launch the browser:', error);
     console.error('Please check the troubleshooting guide.....');
