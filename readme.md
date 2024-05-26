@@ -24,6 +24,11 @@ Este proyecto realiza el scraping de información sobre motos desde el sitio web
 ## Uso del Scrapper
 El scrapper está diseñado para navegar por el sitio web de Mundimoto, recoger datos de todas las motos y guardarlos en un archivo JSON (`motos.json`). El scrapper es capaz de manejar modales emergentes y paginar hasta el final del listado de motos.
 
+### versatilidad
+en scrapperLauncher puedes introducir marca, modelo o dejar un espacio ' ' para scrappear todas las motos, segun lo que queras sprappear:
+ej=>
+scrapper('kawasaki zx6r'); trae todas las motos de la marca kawasaki y modelo zx6r.
+
 ### Iniciar el Scrapper
 Para ejecutar el scrapper y comenzar a recolectar datos, utiliza el siguiente comando:
 
