@@ -35,7 +35,7 @@ const scrapper = async (findProduct) => {
   await page.type(inputId, findProduct);
 
   const buttonDataTestId = '[data-testid="header-search-button"]';
-  await page.waitForSelector(buttonDataTestId, { timeout: 60000 });
+  await page.waitForSelector(buttonDataTestId, { timeout: 30000 });
   await page.$eval(buttonDataTestId, (el) => el.click());
 
   await scrapePage(page, browser);
@@ -73,10 +73,11 @@ const scrapePage = async (page, browser) => {
     await closePopupIfPresent(page);
     const nextButtonSelector = 'button:has(svg > path[d="m9 18 6-6-6-6"])';
     const nextButton = await page.$(nextButtonSelector);
-
-    console.log(`Navigating to the next page from page ${pageNum}`);
+    // await page.eval(nextButton), (el) => el.click();
+    
     await page.evaluate((btn) => btn.click(), nextButton);
-    await page.waitForNavigation({ waitUntil: 'networkidle2' });
+    console.log('Navigating to the next page')
+    await page.waitForNavigation();
     scrapePage(page, browser);
   } catch (error) {
     console.log('Next button not found, ending pagination.');
@@ -86,7 +87,7 @@ const scrapePage = async (page, browser) => {
 };
 
 const write = (motosArrays) => {
-  fs.writeFile('motos.json', JSON.stringify(motosArrays), () => {
+  fs.writeFile('motos.json', JSON.stringify({ results: motosArrays }), () => {
     console.log('escrito correctamente');
   });
 };
