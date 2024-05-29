@@ -73,11 +73,10 @@ const scrapePage = async (page, browser) => {
     await closePopupIfPresent(page);
     const nextButtonSelector = 'button:has(svg > path[d="m9 18 6-6-6-6"])';
     const nextButton = await page.$(nextButtonSelector);
-    // await page.eval(nextButton), (el) => el.click();
-    
+
     await page.evaluate((btn) => btn.click(), nextButton);
-    console.log('Navigating to the next page')
-    await page.waitForNavigation();
+    console.log('Navigating to the next page');
+    await page.waitForNavigation({ timeout: 500 });
     scrapePage(page, browser);
   } catch (error) {
     console.log('Next button not found, ending pagination.');
@@ -109,11 +108,11 @@ const autoScroll = async (page) => {
       let totalHeight = 0;
       const distance = 100;
       const timer = setInterval(() => {
-        const scrollHeight = document.body.scrollHeight;
+        const targetHeight = document.body.scrollHeight * 0.7;
         window.scrollBy(0, distance);
         totalHeight += distance;
 
-        if (totalHeight >= scrollHeight - window.innerHeight) {
+        if (totalHeight >= targetHeight) {
           clearInterval(timer);
           resolve();
         }
